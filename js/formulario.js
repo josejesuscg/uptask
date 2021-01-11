@@ -50,7 +50,43 @@ function validarRegistro(e) {
              xhr.onload = function(){
                  if(this.status === 200) {
                     //  console.log(xhr.responseText); mediante arreglo en modelo-admin.php
-                     console.log(JSON.parse(xhr.responseText)); //Json.parse toma los string y los convierte en objeto
+                    //  console.log(JSON.parse(xhr.responseText)); //Json.parse toma los string y los convierte en objeto
+                    var respuesta = JSON.parse(xhr.responseText);
+                    console.log(respuesta);
+                    //Si la respuesta es correcta
+                    if(respuesta.respuesta === 'correcto') {
+                        //Si es un nuevo usuario
+                        if(respuesta.tipo === 'crear'){
+                            Swal.fire({
+                                icon: 'success',
+                                title: 'Usuario Creado',
+                                showConfirmButton: true,
+                                text: 'El usuario se creo correctamente'
+                                
+                              });
+                        } else if(respuesta.tipo === 'login'){
+                            Swal.fire({
+                                icon: 'success',
+                                title: 'Login Correcto',
+                                showConfirmButton: true,
+                                text: 'Presione OK para continuar'
+                                
+                              })
+                              .then(resultado =>{
+                                  if(resultado.value) {
+                                      window.location.href = 'index.php';
+                                  }
+                              })
+                        }
+                    } else {
+                        // Hubo un error
+                        Swal.fire({
+                            title: 'Error',
+                            text: 'Hubo un error',
+                            showConfirmButton: true,
+                            icon: 'error'
+                        })
+                    }
                  }
              }
 
